@@ -1,7 +1,7 @@
 'use strict'
 
 var assert = require('assert')
-var getHost = require('.')
+var getHost = require('./index')
 var host = '10.0.3.2'
 
 // window is undefined

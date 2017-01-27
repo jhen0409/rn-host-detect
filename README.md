@@ -9,7 +9,7 @@ This was done in the following projects:
 * [remote-redux-devtools](https://github.com/zalmoxisus/remote-redux-devtools/blob/fbb169173c235eceb136a02a52c6f36b64297910/src/utils/reactNative.js)
 * [reactotron-react-native](https://github.com/infinitered/reactotron/blob/f5de09955b870a90cc772bf6c5139ef8e3ecbbba/packages/reactotron-react-native/src/get-host.js)
 
-This is why you don't need `adb reverse` when you're using these modules on Android emulator.
+That's why you don't need `adb reverse` when you're using these modules on Android emulator.
 
 ## Installation
 

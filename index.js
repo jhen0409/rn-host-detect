@@ -14,7 +14,7 @@ module.exports = function getHostForRN(hostname) {
   ) return hostname
 
   var AndroidConstants = (
-    remoteModuleConfig.find(androidConstants) || []
+    remoteModuleConfig.filter(androidConstants)[0] || []
   )[1]
   if (AndroidConstants) {
     var serverHost = AndroidConstants.ServerHost || hostname
