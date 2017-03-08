@@ -15,5 +15,8 @@
     "url": "git+https://github.com/jhen0409/rn-host-detect.git"
   },
   "author": "Jhen <developer@jhen.me>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "sinon": "^1.17.7"
+  }
 }

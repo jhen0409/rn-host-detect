@@ -4,25 +4,39 @@
  * Get React Native server IP if hostname is `localhost`
  * On Android emulator, the IP of host is `10.0.2.2` (Genymotion: 10.0.3.2)
  */
-module.exports = function getHostForRN(hostname) {
-  var remoteModuleConfig = typeof window !== 'undefined' &&
-    window.__fbBatchedBridgeConfig &&
-    window.__fbBatchedBridgeConfig.remoteModuleConfig
+module.exports = function (hostname) {
   if (
-    !Array.isArray(remoteModuleConfig) ||
+    typeof __fbBatchedBridge !== 'object' ||  // Not on react-native
     hostname !== 'localhost' && hostname !== '127.0.0.1'
-  ) return hostname
-
-  var AndroidConstants = (
-    remoteModuleConfig.filter(androidConstants)[0] || []
-  )[1]
-  if (AndroidConstants) {
-    var serverHost = AndroidConstants.ServerHost || hostname
-    return serverHost.split(':')[0]
+  ) {
+    return hostname;
   }
-  return hostname
-}
+  const originalWarn = console.warn;
+  console.warn = function() {
+    if (arguments[0] && arguments[0].indexOf(`Requiring module 'NativeModules' by name`) > -1) return;
+    return originalWarn.apply(console, arguments);
+  };
 
-function androidConstants(config) {
-  return config && config[0] === 'AndroidConstants'
+  let NativeModules;
+  let PlatformConstants;
+  let AndroidConstants;
+  if (typeof window === 'undefined' || typeof window.require !== 'function') {
+    return hostname;
+  }
+  NativeModules = window.require('NativeModules')
+  console.warn = originalWarn;
+  if (
+    !NativeModules ||
+    (!NativeModules.PlatformConstants && !NativeModules.AndroidConstants)
+  ) {
+    return hostname
+  }
+  PlatformConstants = NativeModules.PlatformConstants
+  AndroidConstants = NativeModules.AndroidConstants
+
+  var serverHost = (PlatformConstants ?
+    PlatformConstants.ServerHost :
+    AndroidConstants.ServerHost
+  ) || hostname
+  return serverHost.split(':')[0]
 }
