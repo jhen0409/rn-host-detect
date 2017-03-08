@@ -13,7 +13,7 @@ module.exports = function (hostname) {
   }
   const originalWarn = console.warn;
   console.warn = function() {
-    if (arguments[0] && arguments[0].indexOf(`Requiring module 'NativeModules' by name`) > -1) return;
+    if (arguments[0] && arguments[0].indexOf('Requiring module \'NativeModules\' by name') > -1) return;
     return originalWarn.apply(console, arguments);
   };
 
