@@ -26,6 +26,8 @@ global.window = {
     }
   },
 }
+global.__fbBatchedBridge = {}
+
 assert.equal(getHost('localhost'), host)
 assert.equal(getHost('127.0.0.1'), host)
 assert.equal(getHost('192.168.1.111'), '192.168.1.111')
