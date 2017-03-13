@@ -11,15 +11,15 @@ module.exports = function (hostname) {
   ) {
     return hostname;
   }
-  const originalWarn = console.warn;
+  var originalWarn = console.warn;
   console.warn = function() {
     if (arguments[0] && arguments[0].indexOf('Requiring module \'NativeModules\' by name') > -1) return;
     return originalWarn.apply(console, arguments);
   };
 
-  let NativeModules;
-  let PlatformConstants;
-  let AndroidConstants;
+  var NativeModules;
+  var PlatformConstants;
+  var AndroidConstants;
   if (typeof window === 'undefined' || typeof window.require !== 'function') {
     return hostname;
   }
