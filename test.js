@@ -14,6 +14,7 @@ console.warn = sinon.spy(console.warn)
 
 // Expected `window.require` on React Native
 global.window = {
+  __DEV__: true,
   require: function(moduleName) {
     // https://github.com/facebook/react-native/blob/5403946f098cc72c3d33ea5cee263fb3dd03891d/packager/src/Resolver/polyfills/require.js#L97
     console.warn(

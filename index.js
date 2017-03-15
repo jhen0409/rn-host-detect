@@ -20,7 +20,7 @@ module.exports = function (hostname) {
   var NativeModules;
   var PlatformConstants;
   var AndroidConstants;
-  if (typeof window === 'undefined' || typeof window.require !== 'function') {
+  if (typeof window === 'undefined' || !window.__DEV__ || typeof window.require !== 'function') {
     return hostname;
   }
   NativeModules = window.require('NativeModules')
