@@ -1,6 +1,6 @@
 {
   "name": "rn-host-detect",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "Get correctly localhost on Android emulator for React Native",
   "scripts": {
     "test": "node test.js",
@@ -15,5 +15,8 @@
     "url": "git+https://github.com/jhen0409/rn-host-detect.git"
   },
   "author": "Jhen <developer@jhen.me>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "sinon": "^1.17.7"
+  }
 }
