@@ -1,8 +1,5 @@
 'use strict'
-var ReactNative = require('react-native')
-var {
-    NativeModules
-} = ReactNative
+var NativeModules = require('react-native').NativeModules
 /*
  * Get React Native server IP if hostname is `localhost`
  * On Android emulator, the IP of host is `10.0.2.2` (Genymotion: 10.0.3.2)
