@@ -11,14 +11,14 @@ function getByRemoteConfig(hostname) {
   if (
     !Array.isArray(remoteModuleConfig) ||
     hostname !== 'localhost' && hostname !== '127.0.0.1'
-  ) return hostname
+  ) return { hostname: hostname, passed: false }
 
   var constants = (
     remoteModuleConfig.find(getConstants) || []
   )[1]
   if (constants) {
     var serverHost = constants.ServerHost || hostname
-    return serverHost.split(':')[0]
+    return { hostname: serverHost.split(':')[0], passed: true }
   }
   return hostname
 }
@@ -27,18 +27,7 @@ function getConstants(config) {
   return config && (config[0] === 'AndroidConstants' || config[0] === 'PlatformConstants')
 }
 
-/*
- * Get React Native server IP if hostname is `localhost`
- * On Android emulator, the IP of host is `10.0.2.2` (Genymotion: 10.0.3.2)
- */
-module.exports = function (hostname) {
-  if (
-    typeof __fbBatchedBridge !== 'object' ||  // Not on react-native
-    hostname !== 'localhost' && hostname !== '127.0.0.1'
-  ) {
-    return hostname
-  }
-  hostname = getByRemoteConfig(hostname)
+function getByRNRequirePolyfill(hostname) {
   var originalWarn = console.warn
   console.warn = function() {
     if (arguments[0] && arguments[0].indexOf('Requiring module \'NativeModules\' by name') > -1) return
@@ -74,4 +63,27 @@ module.exports = function (hostname) {
     AndroidConstants.ServerHost
   ) || hostname
   return serverHost.split(':')[0]
+}
+
+/*
+ * Get React Native server IP if hostname is `localhost`
+ * On Android emulator, the IP of host is `10.0.2.2` (Genymotion: 10.0.3.2)
+ */
+module.exports = function (hostname) {
+  // Check if it in React Native environment
+  if (
+    typeof __fbBatchedBridge !== 'object' ||  // Not on react-native
+    hostname !== 'localhost' && hostname !== '127.0.0.1'
+  ) {
+    return hostname
+  }
+  const result = getByRemoteConfig(hostname)
+
+  // Leave if get hostname by remote config successful
+  if (result.passed) {
+    return result.hostname
+  }
+
+  // Otherwise, use RN's require polyfill
+  return getByRNRequirePolyfill(hostname)
 }
