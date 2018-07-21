@@ -77,7 +77,7 @@ module.exports = function (hostname) {
   ) {
     return hostname
   }
-  const result = getByRemoteConfig(hostname)
+  var result = getByRemoteConfig(hostname)
 
   // Leave if get hostname by remote config successful
   if (result.passed) {
