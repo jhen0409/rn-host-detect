@@ -48,7 +48,14 @@ module.exports = function (hostname) {
   var NativeModules
   var PlatformConstants
   var AndroidConstants
-  if (typeof window === 'undefined' || !window.__DEV__ || typeof window.require !== 'function') {
+  if (
+    typeof window === 'undefined' ||
+    !window.__DEV__ ||
+    typeof window.require !== 'function' ||
+    // RN >= 0.56
+    // TODO: Get NativeModules for RN >= 0.56
+    typeof window.require === 'metroRequire'
+  ) {
     return hostname
   }
   NativeModules = window.require('NativeModules')
