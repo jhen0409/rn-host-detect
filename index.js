@@ -20,7 +20,7 @@ function getByRemoteConfig(hostname) {
     var serverHost = constants.ServerHost || hostname
     return { hostname: serverHost.split(':')[0], passed: true }
   }
-  return hostname
+  return { hostname: hostname, passed: false }
 }
 
 function getConstants(config) {
@@ -72,7 +72,7 @@ function getByRNRequirePolyfill(hostname) {
 module.exports = function (hostname) {
   // Check if it in React Native environment
   if (
-    typeof __fbBatchedBridge !== 'object' ||  // Not on react-native
+    typeof __fbBatchedBridge !== 'object' ||
     hostname !== 'localhost' && hostname !== '127.0.0.1'
   ) {
     return hostname
