@@ -43,7 +43,7 @@ function getByRNRequirePolyfill(hostname) {
     typeof window.require !== 'function' ||
     // RN >= 0.56
     // TODO: Get NativeModules for RN >= 0.56
-    typeof window.require.name === 'metroRequire'
+    window.require.name === 'metroRequire'
   ) {
     return hostname
   }
