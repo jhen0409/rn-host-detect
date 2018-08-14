@@ -21,7 +21,7 @@ global.window = {
       "Requiring module '" +
         moduleName +
         "' by name is only supported for " +
-        'debugging purposes and will BREAK IN PRODUCTION!',
+        'debugging purposes and will BREAK IN PRODUCTION!'
     )
     if (moduleName !== 'NativeModules') return undefined
     return {
