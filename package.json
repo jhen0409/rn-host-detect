@@ -1,6 +1,6 @@
 {
   "name": "rn-host-detect",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Get correctly localhost on Android emulator for React Native",
   "scripts": {
     "test": "node test-055.js && node test-056.js",
