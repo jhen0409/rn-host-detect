@@ -47,7 +47,7 @@ function getByRNRequirePolyfill(hostname) {
   ) {
     return hostname
   }
-  NativeModules = window.require('NativeModules')
+  NativeModules = require('react-native').NativeModules
   console.warn = originalWarn
   if (
     !NativeModules ||
