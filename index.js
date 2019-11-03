@@ -19,8 +19,8 @@ function getByRemoteConfig(hostname) {
   remoteModuleConfig.some(function (config) {
     if (!config) return false
     
-    const name = config[0]
-    const content = config[1]
+    var name = config[0]
+    var content = config[1]
     if (
       (name === 'AndroidConstants' || name === 'PlatformConstants') &&
       content &&
