@@ -14,8 +14,8 @@ function getByRemoteConfig(hostname) {
     hostname !== 'localhost' && hostname !== '127.0.0.1'
   ) return { hostname: hostname, passed: false }
 
-  let result = hostname
-  let passed = false
+  var result = hostname
+  var passed = false
   remoteModuleConfig.some(function (config) {
     if (!config) return false
     
