@@ -8,35 +8,58 @@ function getByRemoteConfig(hostname) {
   var remoteModuleConfig = typeof window !== 'undefined' &&
     window.__fbBatchedBridgeConfig &&
     window.__fbBatchedBridgeConfig.remoteModuleConfig
+
   if (
     !Array.isArray(remoteModuleConfig) ||
     hostname !== 'localhost' && hostname !== '127.0.0.1'
   ) return { hostname: hostname, passed: false }
 
-  var constants = (
-    remoteModuleConfig.find(getConstants) || []
-  )[1]
-  if (constants) {
-    var serverHost = constants.ServerHost || hostname
-    return { hostname: serverHost.split(':')[0], passed: true }
-  }
-  return { hostname: hostname, passed: false }
-}
+  let result = hostname
+  let passed = false
+  remoteModuleConfig.some(function (config) {
+    if (!config) return false
+    
+    const name = config[0]
+    const content = config[1]
+    if (
+      (name === 'AndroidConstants' || name === 'PlatformConstants') &&
+      content &&
+      content.ServerHost
+    ) {
+      result = content.ServerHost.split(':')[0]
+      passed = true
+      return true
+    }
 
-function getConstants(config) {
-  return config && (config[0] === 'AndroidConstants' || config[0] === 'PlatformConstants')
+    if (
+      name === 'SourceCode' &&
+      content &&
+      content.scriptURL
+    ) {
+      result = content.scriptURL.replace(/https?:\/\//, '').split(':')[0]
+      passed = true
+      return true
+    }
+    return false
+  })
+
+  return { hostname: result, passed: passed }
 }
 
 function getByRNRequirePolyfill(hostname) {
   var originalWarn = console.warn
   console.warn = function() {
-    if (arguments[0] && typeof arguments[0].indexOf == 'function' && arguments[0].indexOf('Requiring module \'NativeModules\' by name') > -1) return
+    if (
+      arguments[0] &&
+      typeof arguments[0].indexOf == 'function' &&
+      arguments[0].indexOf('Requiring module \'NativeModules\' by name') > -1
+    ) return
     return originalWarn.apply(console, arguments)
   }
 
   var NativeModules
-  var PlatformConstants
-  var AndroidConstants
+  var Constants
+  var SourceCode
   if (
     typeof window === 'undefined' ||
     !window.__DEV__ ||
@@ -49,20 +72,17 @@ function getByRNRequirePolyfill(hostname) {
   }
   NativeModules = window.require('NativeModules')
   console.warn = originalWarn
-  if (
-    !NativeModules ||
-    (!NativeModules.PlatformConstants && !NativeModules.AndroidConstants)
-  ) {
-    return hostname
-  }
-  PlatformConstants = NativeModules.PlatformConstants
-  AndroidConstants = NativeModules.AndroidConstants
 
-  var serverHost = (PlatformConstants ?
-    PlatformConstants.ServerHost :
-    AndroidConstants.ServerHost
-  ) || hostname
-  return serverHost.split(':')[0]
+  if (!NativeModules) return hostname
+  Constants = NativeModules.PlatformConstants || NativeModules.AndroidConstants
+  SourceCode = NativeModules.SourceCode
+
+  if (Constants && Constants.ServerHost) {
+    return Constants.ServerHost.split(':')[0]
+  } else if (SourceCode && SourceCode.scriptURL) {
+    return SourceCode.scriptURL.replace(/https?:\/\//, '').split(':')[0]
+  }
+  return hostname
 }
 
 /*
@@ -72,7 +92,7 @@ function getByRNRequirePolyfill(hostname) {
 module.exports = function (hostname) {
   // Check if it in React Native environment
   if (
-    typeof __fbBatchedBridge !== 'object' ||
+    typeof __fbBatchedBridgeConfig !== 'object' ||
     hostname !== 'localhost' && hostname !== '127.0.0.1'
   ) {
     return hostname
