@@ -25,7 +25,7 @@ global.__fbBatchedBridgeConfig = {
     [
       'SourceCode',
       {
-        scriptURL: `http://${host}:8081/index.bundle?platform=android&dev=true&minify=false`,
+        scriptURL: 'http://' + host + ':8081/index.bundle?platform=android&dev=true&minify=false',
       },
     ]
   ],
