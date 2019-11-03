@@ -3,7 +3,7 @@
   "version": "1.1.6",
   "description": "Get correctly localhost on Android emulator for React Native",
   "scripts": {
-    "test": "node test-055.js && node test-056.js",
+    "test": "node test-require-polyfill.js && node test-no-require-polyfill.js",
     "prepublish": "npm test"
   },
   "main": "index.js",

@@ -29,7 +29,7 @@ global.window = {
     }
   },
 }
-global.__fbBatchedBridge = {}
+global.__fbBatchedBridgeConfig = {}
 
 assert.equal(getHost('localhost'), host)
 assert.equal(getHost('127.0.0.1'), host)

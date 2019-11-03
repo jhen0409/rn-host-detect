@@ -19,10 +19,20 @@ console.warn = sinon.spy(console.warn)
 //     throw new Error('Test error')
 //   },
 // }
-// global.__fbBatchedBridge = {}
+global.window = global
+global.__fbBatchedBridgeConfig = {
+  remoteModuleConfig: [
+    [
+      'SourceCode',
+      {
+        scriptURL: `http://${host}:8081/index.bundle?platform=android&dev=true&minify=false`,
+      },
+    ]
+  ],
+}
 
-// assert.equal(getHost('localhost'), host)
-// assert.equal(getHost('127.0.0.1'), host)
-// assert.equal(getHost('192.168.1.111'), '192.168.1.111')
+assert.equal(getHost('localhost'), host)
+assert.equal(getHost('127.0.0.1'), host)
+assert.equal(getHost('192.168.1.111'), '192.168.1.111')
 
-// assert.equal(console.warn.called, false)
+assert.equal(console.warn.called, false)
