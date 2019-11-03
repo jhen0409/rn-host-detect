@@ -48,15 +48,6 @@ function getByRemoteConfig(hostname) {
 
 function getByRNRequirePolyfill(hostname) {
   var originalWarn = console.warn
-  console.warn = function() {
-    if (
-      arguments[0] &&
-      typeof arguments[0].indexOf == 'function' &&
-      arguments[0].indexOf('Requiring module \'NativeModules\' by name') > -1
-    ) return
-    return originalWarn.apply(console, arguments)
-  }
-
   var NativeModules
   var Constants
   var SourceCode
@@ -70,10 +61,21 @@ function getByRNRequirePolyfill(hostname) {
   ) {
     return hostname
   }
-  NativeModules = window.require('NativeModules')
+  console.warn = function() {
+    if (
+      arguments[0] &&
+      typeof arguments[0].indexOf == 'function' &&
+      arguments[0].indexOf("Requiring module 'NativeModules' by name") > -1
+    )
+      return
+    return originalWarn.apply(console, arguments)
+  }
+  try {
+    NativeModules = window.require('NativeModules')
+  } catch (e) {}
   console.warn = originalWarn
-
   if (!NativeModules) return hostname
+
   Constants = NativeModules.PlatformConstants || NativeModules.AndroidConstants
   SourceCode = NativeModules.SourceCode
 
